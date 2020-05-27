@@ -25,6 +25,33 @@ const DATA =[
 ]
 
 
+const DATA_ =[
+  {
+    "title": "The Basics - Networking",
+    "description": "Your app fetched this from a remote endpoint!",
+    "movies": [
+      { "key": "1", "name": "Star Wars", "Year": "1977" },
+      { "key": "2", "name": "Back to the Future", "Year": "1985" },
+      { "key": "3", "name": "The Matrix", "Year": "1999" },
+      { "key": "4", "name": "Inception", "Year": "2010" },
+      { "key": "5", "name": "Interstellar", "Year": "2014" }
+    ]
+  },
+  {
+    "title": "Hello",
+    "description": "Your app fetched this from a remote endpoint!",
+    "movies": [
+      { "key": "1", "name": "Star Wars", "Year": "1977" },
+      { "key": "2", "name": "Back to the Future", "Year": "1985" },
+      { "key": "3", "name": "The Matrix", "Year": "1999" },
+      { "key": "4", "name": "Inception", "Year": "2010" },
+      { "key": "5", "name": "Interstellar", "Year": "2014" }
+    ]
+  },
+
+]
+
+
 export default class FlatListScreen extends Component {
   constructor(props) {
     super(props);
@@ -38,39 +65,73 @@ export default class FlatListScreen extends Component {
     };
   };
 
-
   keyExtractor = (item, index) => index.toString()
-  renderItem = ({ item }) => {
-     return(
-        <View>
-          <Text>{item.key}</Text>
-          <Text>{item.name}</Text>
-          <Text>{item.year}</Text>
-        </View>
-     )   
+  renderItem = ({item}) => {    
+    console.log(item);
+    return(      
+       <View style={styles.Container}>
+         <View style={styles.imgItem}>
+           </View> 
+         <View style={styles.txtItem}>
+            <Text>{item.title}</Text>
+            <Text>{item.description}</Text>          
+            <Text>{item.movies.year}</Text>          
+         </View>
+       </View>
+
+    )   
   };
 
+// Hàm chạy trước Render
+componentWillMount =() =>{
+  this.setState({
+       data:DATA_,
+  })
+}
+ 
 
-  
+FlatListItemSeparator = () => {
+    return (      
+      <View style={{
+         height: 2,
+         width:"100%",
+         backgroundColor:"rgba(0,0,0,0.3)",
+          }}/>
+       );
+    };
+
+
   // Render chính
-    render() {
-    return(     
+render() {
+    return(       
      <View>
         <FlatList
         keyExtractor={this.keyExtractor}
-        data={DATA}     
-        renderItem={this.renderItem}
-           //console.log(`Item = ${item.key}  `);
-        />
-     </View>    
+        data={this.state.data}     
+        renderItem={this.renderItem}           
+        ItemSeparatorComponent = {this.FlatListItemSeparator}
+        />                
+     </View>         
      
     )
   };
 };
-/////////////////////////
 
+
+//////////////////////////////////////////////////
 const styles=StyleSheet.create({
   Container :{
+    flex:1,
+    flexDirection:"row",
+    backgroundColor:"gray",        
+  },
 
-  } 
+  txtItem :{
+    flex :4,
+    color:"white"
+  },
+  imgItem:{
+      flex:1,
+      backgroundColor:"blue"
+  }  
 });
