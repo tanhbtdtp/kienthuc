@@ -7,22 +7,7 @@
  */
 
 import React ,{Component} from 'react';
-import {StyleSheet,List,FlatList,ListItem, View,Text} from 'react-native';
-
-
-const DATA =[
-{"key" : "1", "name" : "tan", "year" :"2020" },
-{"key" : "2", "name" : "tan1", "year" :"20201" },
-{"key" : "3", "name" : "tan2", "year" :"20202" },
-{"key" : "4", "name" : "tan3", "year" :"20203" },
-{"key" : "5", "name" : "tan4", "year" :"20204" },
-{"key" : "6", "name" : "tan2", "year" :"20202" },
-{"key" : "7", "name" : "tan3", "year" :"20203" },
-{"key" : "8", "name" : "tan4", "year" :"20204" },
-{"key" : "9", "name" : "tan2", "year" :"20202" },
-{"key" : "10", "name" : "tan3", "year" :"20203" },
-{"key" : "11", "name" : "tan4", "year" :"20204" },
-]
+import {StyleSheet,List,FlatList,ListItem, View,Text,Image} from 'react-native';
 
 
 export default class FlatListScreen extends Component {
@@ -44,25 +29,38 @@ export default class FlatListScreen extends Component {
     return(      
        <View style={styles.Container}>
          <View style={styles.imgItem}>
+            <Image              
+              style={styles.img}
+              source={{ uri: item.image_url }}              
+            />
            </View> 
          <View style={styles.txtItem}>
             <Text>{item.id}</Text>
-            <Text>{item.title}</Text>          
-            <Text>{item.releaseYear}</Text>          
+            <Text>{item.name}</Text>
+            <Text numberOfLines={3} >{item.description}</Text>
+                
          </View>
        </View>
     )   
   };
 
 // Hàm chạy trước Render
-componentDidMount = async() => {
-  let url = 'https://reactnative.dev/movies.json';
+componentDidMount = () => {
+  this.getdata_();
+  }
+
+
+
+
+getdata_ =() =>{
+
+  let url = 'https://api.punkapi.com/v2/beers?page=2&per_page=30';
   this.setState({ loading: true });
   fetch(url)
     .then(res => res.json())
     .then(res => {
       this.setState({
-        data: res.movies,        
+        data: res,        
         loading: false,
         refreshing: false
       });
@@ -70,7 +68,11 @@ componentDidMount = async() => {
     .catch(error => {
       this.setState({ error, loading: false });
     });
-  }
+};
+
+
+
+
 
 FlatListItemSeparator = () => {
     return (      
@@ -110,8 +112,18 @@ const styles=StyleSheet.create({
     flex :4,
     color:"white"
   },
+
   imgItem:{
-      flex:1,
-      backgroundColor:"blue"
-  }  
+      flex:1, 
+      justifyContent:"center",
+      alignItems:"center"    
+  },
+  img :{   
+    height:90,
+    width:90,
+    resizeMode : "contain",
+    marginVertical:10
+    
+  }
+  
 });
