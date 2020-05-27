@@ -25,33 +25,6 @@ const DATA =[
 ]
 
 
-const DATA_ =[
-  {
-    "title": "The Basics - Networking",
-    "description": "Your app fetched this from a remote endpoint!",
-    "movies": [
-      { "key": "1", "name": "Star Wars", "Year": "1977" },
-      { "key": "2", "name": "Back to the Future", "Year": "1985" },
-      { "key": "3", "name": "The Matrix", "Year": "1999" },
-      { "key": "4", "name": "Inception", "Year": "2010" },
-      { "key": "5", "name": "Interstellar", "Year": "2014" }
-    ]
-  },
-  {
-    "title": "Hello",
-    "description": "Your app fetched this from a remote endpoint!",
-    "movies": [
-      { "key": "1", "name": "Star Wars", "Year": "1977" },
-      { "key": "2", "name": "Back to the Future", "Year": "1985" },
-      { "key": "3", "name": "The Matrix", "Year": "1999" },
-      { "key": "4", "name": "Inception", "Year": "2010" },
-      { "key": "5", "name": "Interstellar", "Year": "2014" }
-    ]
-  },
-
-]
-
-
 export default class FlatListScreen extends Component {
   constructor(props) {
     super(props);
@@ -73,22 +46,31 @@ export default class FlatListScreen extends Component {
          <View style={styles.imgItem}>
            </View> 
          <View style={styles.txtItem}>
-            <Text>{item.title}</Text>
-            <Text>{item.description}</Text>          
-            <Text>{item.movies.year}</Text>          
+            <Text>{item.id}</Text>
+            <Text>{item.title}</Text>          
+            <Text>{item.releaseYear}</Text>          
          </View>
        </View>
-
     )   
   };
 
 // Hàm chạy trước Render
-componentWillMount =() =>{
-  this.setState({
-       data:DATA_,
-  })
-}
- 
+componentDidMount = async() => {
+  let url = 'https://reactnative.dev/movies.json';
+  this.setState({ loading: true });
+  fetch(url)
+    .then(res => res.json())
+    .then(res => {
+      this.setState({
+        data: res.movies,        
+        loading: false,
+        refreshing: false
+      });
+    })
+    .catch(error => {
+      this.setState({ error, loading: false });
+    });
+  }
 
 FlatListItemSeparator = () => {
     return (      
@@ -98,8 +80,7 @@ FlatListItemSeparator = () => {
          backgroundColor:"rgba(0,0,0,0.3)",
           }}/>
        );
-    };
-
+};
 
   // Render chính
 render() {
@@ -116,7 +97,6 @@ render() {
     )
   };
 };
-
 
 //////////////////////////////////////////////////
 const styles=StyleSheet.create({
